@@ -65,7 +65,7 @@ function HeaderPython()  "python加头注释
     call setline(1, "#!/usr/bin/env python3")
     call append(1,  "# -*- coding: utf-8 -*-")
     call append(2,  "# mail:levy_lv@hotmail.com")
-    call append(3,  "# Lyu Wei @ " . strftime('%Y-%m-%d', localtime()))
+    call append(3,  "# Wei Lyu@ " . strftime('%Y-%m-%d', localtime()))
     normal G
     normal o
     normal o
@@ -76,7 +76,7 @@ function HeaderBash()  "shell脚本加注释
     call setline(1, "#!/bin/bash")
     call append(1,  "# -*- coding: utf-8 -*-")
     call append(2,  "# mail:levy_lv@hotmail.com")
-    call append(3,  "# Lyu Wei @ " . strftime('%Y-%m-%d', localtime()))
+    call append(3,  "# Wei Lyu@ " . strftime('%Y-%m-%d', localtime()))
     normal G
     normal o
     normal o
