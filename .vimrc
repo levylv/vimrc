@@ -1,4 +1,4 @@
-"Lv Wei
+"Wei Lyu
 "levy_lv@hotmail.com
 "levylv.github.io
 
@@ -12,11 +12,12 @@ set autochdir "自动切换当前目录
 set mouse=a
 
 "启动，语法高亮，配色
-winpos 0 0   "窗口位置
-set lines=250 columns=95  "窗口大小
+winpos 500 200   "窗口位置
+set lines=30 columns=85  "窗口大小
 set guioptions-=T  "不要菜单栏
 set laststatus=2   "总是显示状态栏
 set hlsearch  "搜索高亮
+set ignorecase "搜索忽略大小写
 syntax enable
 syntax on
 set t_Co=256
@@ -26,6 +27,7 @@ set number
 set guifont=Ubuntu\ Mono\ 13
 colorscheme molokai
 set clipboard=unnamed "可以用系统剪贴板
+
 "Tab相关
 set expandtab "制表符扩展为空格
 set tabstop=4 "制表符占用空格数
@@ -58,17 +60,12 @@ nmap <M-k> mz:m-2<cr>`z
 vmap <M-j> :m'>+<cr>`<my`>mzgv`yo`z
 vmap <M-k> :m'<-2<cr>`>my`<mzgv`yo`z
 
-"omnicomplete
-set completeopt=longest,menu " 关掉智能补全时的预览窗口
-
-" 生成c++的tags,智能补全自己定义的类for omnicppcomplete插件
-"nmap <silent> <F4> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR><CR>
-
 "根据文件类型做不同处理
 function HeaderPython()  "python加头注释
-    call setline(1, "#!/usr/bin/env python")
+    call setline(1, "#!/usr/bin/env python3")
     call append(1,  "# -*- coding: utf-8 -*-")
-    call append(2,  "# Lv Wei @ " . strftime('%Y-%m-%d', localtime()))
+    call append(2,  "# mail:levy_lv@hotmail.com")
+    call append(3,  "# Lyu Wei @ " . strftime('%Y-%m-%d', localtime()))
     normal G
     normal o
     normal o
@@ -77,12 +74,31 @@ autocmd bufnewfile *.py call HeaderPython()
 
 function HeaderBash()  "shell脚本加注释
     call setline(1, "#!/bin/bash")
-    call append(1,  "# Lv Wei @ " . strftime('%Y-%m-%d', localtime()))
+    call append(1,  "# -*- coding: utf-8 -*-")
+    call append(2,  "# mail:levy_lv@hotmail.com")
+    call append(3,  "# Lyu Wei @ " . strftime('%Y-%m-%d', localtime()))
     normal G
     normal o
     normal o
 endf
 autocmd bufnewfile *.sh call HeaderBash()
+
+function HeaderCpp() "C++文件加头文件
+    call setline(1, "#include <iostream>")
+    call append(1, "using namespace std;")
+    normal G
+    normal o
+    normal o
+endf
+autocmd bufnewfile *.cpp,*.cc call HeaderCpp()
+
+"C,C++单个文件调试
+map <F8> :call Rungdb()<CR>
+func! Rungdb()
+    exec "w"
+    exec "!g++ % -g -o %<"
+    exec "!gdb ./%<"
+endfunc
 
 "===================="
 "Vundle Configuration"
@@ -103,9 +119,8 @@ Plugin 'VundleVim/Vundle.vim'
 " plugin on GitHub repo
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'luochen1990/rainbow'
-Plugin 'majutsushi/tagbar'
+"Plugin 'majutsushi/tagbar'
 Plugin 'fholgado/minibufexpl.vim'
-Plugin 'suan/vim-instant-markdown'
 Plugin 'scrooloose/nerdtree'
 
 
@@ -123,30 +138,28 @@ filetype plugin indent on    " required
 let g:rainbow_active = 1 " 0 if you want to enable it later via: RainbowTogglw
 
 "Tagbar
-nmap <F8> :TagbarToggle<CR>
+"nmap <F8> :TagbarToggle<CR>
 
 "YouCompleteMe
+"let g:ycm_path_to_python_interpreter = '/usr/bin/python'
+set runtimepath+=~/.vim/bundle/YouCompleteMe
+let g:ycm_collect_identifiers_from_tags_files = 1           " 开启 YCM 基于标签引擎
+let g:ycm_collect_identifiers_from_comments_and_strings = 1 " 注释与字符串中的内容也用于补全
+let g:syntastic_ignore_files=[".*\.py$"]
+let g:ycm_seed_identifiers_with_syntax = 1                  " 语法关键字补全
+let g:ycm_complete_in_comments = 1
+let g:ycm_confirm_extra_conf = 0
+"let g:ycm_key_list_select_completion = ['<c-n>', '<Down>']  " 映射按键, 没有这个会拦截掉tab, 导致其他插件的tab不能用.
+"let g:ycm_key_list_previous_completion = ['<c-p>', '<Up>']
+let g:ycm_complete_in_comments = 1                          " 在注释输入中也能补全
+let g:ycm_complete_in_strings = 1                           " 在字符串输入中也能补全
+let g:ycm_collect_identifiers_from_comments_and_strings = 1 " 注释和字符串中的文字也会被收入补全
+let g:ycm_global_ycm_extra_conf='~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+"let g:ycm_show_diagnostics_ui = 0                           " 禁用语法检查
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<CR>" |            " 回车即选中当前项
 nnoremap <F5> :YcmCompleter GoToDefinitionElseDeclaration<CR>
-let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-
-
-
-"omnicppcomplete for C++全能补全,系统自带的模式无C++补全,故需下载插件
-"let OmniCpp_MayCompleteDot = 1 " autocomplete with .
-"let OmniCpp_MayCompleteArrow = 1 " autocomplete with ->
-"let OmniCpp_MayCompleteScope = 1 " autocomplete with ::
-"let OmniCpp_SelectFirstItem = 2 " select first item (but don't insert)
-"let OmniCpp_NamespaceSearch = 2 " search namespaces in this and included files
-"let OmniCpp_ShowPrototypeInAbbr = 1 " show function prototype in popup window
-"let OmniCpp_GlobalScopeSearch=1 " enable the global scope search
-"let OmniCpp_DisplayMode=1 " Class scope completion mode: always show all members
-"let OmniCpp_DefaultNamespaces=["std"]
-"let OmniCpp_ShowScopeInAbbr=1 " show scope in abbreviation and remove the last column
-"let OmniCpp_ShowAccess=1 
-
-""vim-instant-markdown
-"let g:instant_markdown_slow = 0
-"let g:instant_markdown_autostart = 0
+"let g:ycm_min_num_of_chars_for_completion=2                 " 从第2个键入字符就开始罗列匹配项
+let g:ycm_autoclose_preview_window_after_completion = 1  " 补全后自动关闭preview
 
 "minibufexpl
 let g:miniBufExplMapWindowNavVim = 1 "可以用<C-h,j,k,l>切换到上下左右的窗口 
@@ -154,8 +167,4 @@ let g:miniBufExplMapCTabSwitchBufs = 1 "<C-Tab>,<C-S-Tab>切换
 let g:miniBufExplModSelTarget = 1 
 
 "NERDTree
-nnoremap <F4> :NERDTree<CR>
-
-
-
-
+nnoremap <F4> :NERDTreeToggle<CR>
