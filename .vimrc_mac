@@ -1,0 +1,83 @@
+"===================="
+"        通用        "
+"===================="
+set nocompatible              " be iMproved, required
+filetype plugin indent on
+set nobackup "不备份 
+set autochdir "自动切换当前目录
+
+"启动，语法高亮，配色
+" winpos 150 200   "窗口位置
+"set lines=200 columns=100  "窗口大小
+set laststatus=2   "总是显示状态栏
+set hlsearch  "搜索高亮
+set ignorecase "搜索忽略大小写
+syntax enable
+syntax on
+set cursorline "高亮光标行
+set ruler   "显示光标位置状态栏
+set number
+set clipboard=unnamed "可以用系统剪贴板
+set guifont=Monaco:h15
+
+"Tab相关
+set expandtab "制表符扩展为空格
+set tabstop=4 "制表符占用空格数
+set softtabstop=4 "将连续数量的空格视为一个制表符
+set shiftwidth=4 "格式化时制表符占用空格数
+set cindent
+set autoindent
+
+"编码相关
+set encoding=utf-8
+set langmenu=zh_CN.UTF-8
+language message zh_CN.UTF-8
+set fileencodings=ucs-bom,utf-8,cp936,gb18030,big5,euc-jp,euc-kr,latin1
+
+"使用箭头导航buffer"
+map <right> :bn<cr>
+map <left> :bp<cr>
+set autowrite "在切换buffer时自动保存当前的文件
+
+"===================="
+"Vundle Configuration"
+"===================="
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'VundleVim/Vundle.vim'
+
+" My Plugin here:
+
+" plugin on GitHub repo
+" Plugin 'Valloric/YouCompleteMe'
+Plugin 'luochen1990/rainbow'
+" Plugin 'majutsushi/tagbar'
+" Plugin 'fholgado/minibufexpl.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'tomasr/molokai'
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+
+"==========================="
+"Vundle Plugin Configuration"
+"==========================="
+
+"rainbow
+let g:rainbow_active = 1 " 0 if you want to enable it later via: RainbowTogglw
+
+"NERDTree
+nnoremap <TAB> :NERDTreeToggle<CR>
+
+"molokai
+colorscheme molokai
